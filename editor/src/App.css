@@ -1,0 +1,41 @@
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  padding: 0.5rem;
+  background: #333;
+  color: #fff;
+}
+
+.toolbar button {
+  margin-right: 0.5rem;
+}
+
+.panes {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.script-input {
+  flex: 1;
+  padding: 1rem;
+  font-family: monospace;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.script-output {
+  flex: 1;
+  margin: 0;
+  padding: 1rem;
+  overflow: auto;
+  background: #f7f7f7;
+  color: #000;
+  font-size: 0.9rem;
+}
