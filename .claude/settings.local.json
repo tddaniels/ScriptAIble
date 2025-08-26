@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install)",
+      "Bash(npm run build:*)",
+      "Bash(npm run clean:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run lint)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:afterwriting.com)",
+      "Bash(git restore:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run editor:install:*)",
+      "WebFetch(domain:www.slatejs.org)"
+    ],
+    "deny": []
+  }
+}
