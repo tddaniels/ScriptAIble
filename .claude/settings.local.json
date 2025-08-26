@@ -13,7 +13,8 @@
       "Bash(git restore:*)",
       "Bash(npm install:*)",
       "Bash(npm run editor:install:*)",
-      "WebFetch(domain:www.slatejs.org)"
+      "WebFetch(domain:www.slatejs.org)",
+      "Bash(npm ls:*)"
     ],
     "deny": []
   }

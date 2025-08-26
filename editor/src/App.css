@@ -82,6 +82,9 @@
   background: #f7f7f7;
   color: #000;
   font-size: 0.9rem;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
 }
 
 .preview-pane {

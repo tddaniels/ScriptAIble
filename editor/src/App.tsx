@@ -1,23 +1,52 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Fountain } from 'fountain-js';
 // import { ScreenplayEditor } from './components/ScreenplayEditor';
 import { SlateScreenplayEditor } from './components/SlateScreenplayEditor';
 import { SceneBoard } from './components/SceneBoard';
 import { TestSuite } from './components/TestSuite';
 import { SlateTestSuite } from './components/SlateTestSuite';
+import ScriptStatistics from './components/ScriptStatistics';
+import { useScriptStore } from './stores/scriptStore';
+import { useAutoSave } from './hooks/useAutoSave';
+import { useVersionControl } from './hooks/useVersionControl';
+import { exportScreenplayToPDF } from './services/pdfExporter';
+import { FinalDraftConverter } from './services/fdxConverter';
+import { getQuickStats } from './services/statistics';
 import './App.css';
 import './components/ScreenplayEditor.css';
 import './components/ScreenplayFormatting.css';
 import './components/SceneBoard.css';
 import './components/TestSuite.css';
 import './components/SlateTestSuite.css';
+import './components/ScriptStatistics.css';
 
 export default function App() {
-  const [script, setScript] = useState('');
   const [parsed, setParsed] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'script' | 'scenes' | 'preview' | 'test' | 'slate-test'>('script');
+  const [activeTab, setActiveTab] = useState<'script' | 'scenes' | 'preview' | 'test' | 'slate-test' | 'stats'>('script');
+  const [quickStats, setQuickStats] = useState<any>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+  const fdxInput = useRef<HTMLInputElement>(null);
   const fountain = useRef(new Fountain()).current;
+  
+  // Zustand store
+  const {
+    getCurrentScript,
+    updateScript,
+    createScript,
+    getAllScripts,
+    currentScriptId,
+    loadScript: loadStoredScript
+  } = useScriptStore();
+  
+  const currentScript = getCurrentScript();
+  const script = currentScript?.content || '';
+  const scriptTitle = currentScript?.title || 'Untitled Script';
+  
+  // Version control
+  const versionControl = useVersionControl(currentScriptId);
+  
+  // Auto-save
+  useAutoSave(script, currentScriptId);
 
   const loadScript = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -25,10 +54,33 @@ export default function App() {
     const reader = new FileReader();
     reader.onload = ev => {
       const text = (ev.target?.result as string) ?? '';
-      setScript(text);
+      const newScriptId = createScript(file.name.replace(/\.[^/.]+$/, ''));
+      updateScript(newScriptId, text);
+      versionControl.save(text, 'import', `Imported from ${file.name}`);
       setParsed(fountain.parse(text));
     };
     reader.readAsText(file);
+  };
+  
+  const loadFDXScript = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    try {
+      const converter = new FinalDraftConverter();
+      const result = await converter.importFDX(file);
+      if (result.success) {
+        const title = result.title || file.name.replace(/\.[^/.]+$/, '');
+        const newScriptId = createScript(title);
+        updateScript(newScriptId, result.fountainContent);
+        versionControl.save(result.fountainContent, 'import', `Imported FDX from ${file.name}`);
+        setParsed(fountain.parse(result.fountainContent));
+      } else {
+        alert(`Failed to import FDX: ${result.error}`);
+      }
+    } catch (error) {
+      alert(`Error importing FDX: ${error}`);
+    }
   };
 
   const saveScript = () => {
@@ -36,19 +88,93 @@ export default function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'script.fountain';
+    a.download = `${scriptTitle}.fountain`;
     a.click();
     URL.revokeObjectURL(url);
   };
-
-  const handleChange = (text: string) => {
-    setScript(text);
-    try {
-      setParsed(fountain.parse(text));
-    } catch {
-      setParsed(null);
+  
+  const exportPDF = () => {
+    if (!parsed || !parsed.tokens) return;
+    const exporter = exportScreenplayToPDF(
+      parsed.tokens,
+      scriptTitle,
+      'Author' // TODO: Get from script metadata
+    );
+    exporter.save(`${scriptTitle}.pdf`);
+  };
+  
+  const exportFDX = () => {
+    FinalDraftConverter.downloadFDX(script, `${scriptTitle}.fdx`, {
+      title: scriptTitle,
+      author: 'Author' // TODO: Get from script metadata
+    });
+  };
+  
+  const createNewScript = () => {
+    createScript();
+    versionControl.save('', 'create', 'Created new script');
+  };
+  
+  const handleUndo = () => {
+    const previousContent = versionControl.undo();
+    if (previousContent !== null && currentScriptId) {
+      updateScript(currentScriptId, previousContent);
+      setParsed(fountain.parse(previousContent));
     }
   };
+  
+  const handleRedo = () => {
+    const nextContent = versionControl.redo();
+    if (nextContent !== null && currentScriptId) {
+      updateScript(currentScriptId, nextContent);
+      setParsed(fountain.parse(nextContent));
+    }
+  };
+
+  const handleChange = (text: string) => {
+    if (currentScriptId) {
+      updateScript(currentScriptId, text);
+      versionControl.save(text, 'edit');
+      try {
+        const parsed = fountain.parse(text);
+        setParsed(parsed);
+        // Update quick stats
+        if (parsed.tokens) {
+          setQuickStats(getQuickStats(parsed.tokens));
+        }
+      } catch {
+        setParsed(null);
+      }
+    }
+  };
+  
+  // Initialize with a default script if none exists
+  useEffect(() => {
+    const scripts = getAllScripts();
+    if (scripts.length === 0) {
+      createNewScript();
+    } else if (!currentScriptId) {
+      loadStoredScript(scripts[0].id);
+    }
+  }, []);
+  
+  // Update parsed content when script changes
+  useEffect(() => {
+    if (script) {
+      try {
+        const parsed = fountain.parse(script);
+        setParsed(parsed);
+        if (parsed.tokens) {
+          setQuickStats(getQuickStats(parsed.tokens));
+        }
+      } catch {
+        setParsed(null);
+      }
+    } else {
+      setParsed(null);
+      setQuickStats(null);
+    }
+  }, [script]);
 
   const handleSceneClick = (sceneId: string) => {
     // TODO: Navigate to scene in editor
@@ -59,13 +185,31 @@ export default function App() {
     <div className="editor-container">
       <div className="toolbar">
         <div className="toolbar-left">
+          <button onClick={createNewScript}>New</button>
           <button onClick={() => fileInput.current?.click()}>Load</button>
+          <button onClick={() => fdxInput.current?.click()}>Import FDX</button>
           <button onClick={saveScript}>Save</button>
+          <button onClick={exportPDF} disabled={!parsed}>Export PDF</button>
+          <button onClick={exportFDX} disabled={!script}>Export FDX</button>
+          <button onClick={handleUndo} disabled={!versionControl.canUndo()}>↶ Undo</button>
+          <button onClick={handleRedo} disabled={!versionControl.canRedo()}>↷ Redo</button>
+          {quickStats && (
+            <span className="quick-stats">
+              {quickStats.pages}p • {quickStats.words}w • {quickStats.scenes}s • {quickStats.runtime}
+            </span>
+          )}
           <input
             type="file"
             accept=".fountain,.txt"
             ref={fileInput}
             onChange={loadScript}
+            style={{ display: 'none' }}
+          />
+          <input
+            type="file"
+            accept=".fdx"
+            ref={fdxInput}
+            onChange={loadFDXScript}
             style={{ display: 'none' }}
           />
         </div>
@@ -100,6 +244,12 @@ export default function App() {
             onClick={() => setActiveTab('slate-test')}
           >
             Slate Test
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'stats' ? 'active' : ''}`}
+            onClick={() => setActiveTab('stats')}
+          >
+            Statistics
           </button>
         </div>
       </div>
@@ -143,6 +293,16 @@ export default function App() {
         
         {activeTab === 'slate-test' && (
           <SlateTestSuite />
+        )}
+        
+        {activeTab === 'stats' && (
+          <div className="stats-pane">
+            {parsed?.tokens ? (
+              <ScriptStatistics tokens={parsed.tokens} />
+            ) : (
+              <p>No script loaded for statistics</p>
+            )}
+          </div>
         )}
       </div>
     </div>

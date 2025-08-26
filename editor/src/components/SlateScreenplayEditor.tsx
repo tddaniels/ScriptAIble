@@ -4,6 +4,7 @@ import type { Descendant } from 'slate';
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { Fountain } from 'fountain-js';
+// import { useSpellCheck } from '../hooks/useSpellCheck';
 
 // TypeScript type definitions for Slate
 type ScreenplayElementType = 'scene_heading' | 'action' | 'character' | 'dialogue' | 'parenthetical' | 'transition';
@@ -116,6 +117,12 @@ export function SlateScreenplayEditor({ value, onChange, fountain }: SlateScreen
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
   const [suggestionsPosition, setSuggestionsPosition] = useState({ top: 0, left: 0 });
+
+  // Spell checking (currently unused but available for future enhancements)
+  // const { errors: spellErrors, isReady: spellCheckReady } = useSpellCheck(value, { 
+  //   enabled: true,
+  //   debounceMs: 2000 
+  // });
 
   // Element cycle order for TAB key
   const elementCycle: ScreenplayElementType[] = ['scene_heading', 'action', 'character', 'dialogue', 'parenthetical'];
