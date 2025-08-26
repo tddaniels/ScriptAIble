@@ -73,6 +73,20 @@ export function SlateTestSuite() {
       status: 'pending'
     },
     {
+      name: 'Parenthetical Input with "("',
+      description: 'Test that typing "(" at start of line creates parenthetical element',
+      steps: [
+        'Press Enter to create new line',
+        'Type: "(" (opening parenthesis)',
+        'Verify it immediately switches to parenthetical element type',
+        'Verify proper indentation (3.1" from left edge)',
+        'Type: "beat" and verify auto-completion suggestions appear',
+        'Select a suggestion or complete with ")" to close parenthetical'
+      ],
+      expected: 'Line should format as parenthetical with proper indentation and italic styling',
+      status: 'pending'
+    },
+    {
       name: 'Auto-Completion Suggestions',
       description: 'Test that suggestions appear and work correctly',
       steps: [
@@ -341,6 +355,8 @@ FADE OUT.`;
           <li><strong>TAB cycling</strong> - should cycle through all element types</li>
           <li><strong>Auto-suggestions</strong> - should appear and be selectable</li>
           <li><strong>Industry-standard formatting</strong> - margins and indentation should be correct</li>
+          <li><strong>Parenthetical detection</strong> - typing "(" should immediately switch to parenthetical mode</li>
+          <li><strong>Parenthetical formatting</strong> - 3.1" indentation, italic, lowercase (except proper nouns)</li>
         </ul>
       </div>
     </div>

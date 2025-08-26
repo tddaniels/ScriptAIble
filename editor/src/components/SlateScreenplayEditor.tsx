@@ -88,8 +88,8 @@ const detectElementType = (lineText: string): ScreenplayElementType => {
     return 'character';
   }
   
-  // Parenthetical
-  if (/^\(.*\)$/.test(trimmed)) {
+  // Parenthetical - detect if line starts with "(" (even if not closed yet)
+  if (/^\(/.test(trimmed)) {
     return 'parenthetical';
   }
   
@@ -220,18 +220,41 @@ export function SlateScreenplayEditor({ value, onChange, fountain }: SlateScreen
           'crying',
           'whispering',
           'shouting',
+          'loudly',
+          'quietly',
+          'softly',
           'to himself',
           'to herself',
+          'to the camera',
+          'aside',
           'sarcastically',
           'angrily',
           'sadly',
+          'happily',
+          'nervously',
           'confused',
+          'surprised',
+          'shocked',
           'laughing',
+          'sighing',
+          'breathing heavily',
+          'under his breath',
+          'under her breath',
+          'muttering',
           'phone',
+          'into phone',
+          'on phone',
           'continuing',
           'interrupting',
+          'overlapping',
           'off screen',
-          'voice over'
+          'O.S.',
+          'voice over',
+          'V.O.',
+          'singing',
+          'humming',
+          'reading',
+          'thinking aloud'
         ];
         
         // Remove parentheses for matching
