@@ -1,0 +1,151 @@
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.toolbar {
+  padding: 0.5rem;
+  background: #333;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toolbar-left {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toolbar button {
+  margin: 0;
+}
+
+.toolbar-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.tab-button {
+  padding: 8px 16px;
+  border: none;
+  background: #555;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  background: #666;
+}
+
+.tab-button.active {
+  background: #f8f9fa;
+  color: #333;
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.panes {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.script-input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  border: none;
+  outline: none;
+  resize: none;
+  background: white;
+}
+
+.script-output {
+  flex: 1;
+  margin: 0;
+  padding: 1rem;
+  overflow: auto;
+  background: #f7f7f7;
+  color: #000;
+  font-size: 0.9rem;
+}
+
+.preview-pane {
+  flex: 1;
+  overflow: auto;
+  background: white;
+  padding: 2rem;
+}
+
+.formatted-script {
+  max-width: 8.5in;
+  margin: 0 auto;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 12pt;
+  line-height: 1.5;
+}
+
+.formatted-script h3 {
+  text-align: left;
+  margin: 1.5em 0 1em 0;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.formatted-script h4 {
+  text-align: center;
+  margin: 1em 0 0 0;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.formatted-script .dialogue {
+  margin: 0 1.5in 0 2.5in;
+}
+
+.formatted-script .dialogue.left {
+  margin-right: 4in;
+}
+
+.formatted-script .dialogue.right {
+  margin-left: 4in;
+}
+
+.formatted-script .dual-dialogue {
+  display: flex;
+}
+
+.formatted-script .dual-dialogue .dialogue {
+  flex: 1;
+}
+
+.formatted-script .parenthetical {
+  text-align: center;
+  margin: 0 2in;
+  font-style: italic;
+}
+
+.formatted-script .centered {
+  text-align: center;
+}
+
+.formatted-script h2 {
+  text-align: right;
+  margin: 1em 0;
+  font-weight: bold;
+  text-transform: uppercase;
+}

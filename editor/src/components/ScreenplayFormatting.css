@@ -1,0 +1,294 @@
+/* Industry Standard Screenplay Formatting */
+/* Based on Final Draft and Fountain format standards */
+
+.screenplay-input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 1in 1in 1in 1.5in; /* Top, Right, Bottom, Left margins */
+  font-family: 'Courier New', 'Courier', monospace;
+  font-size: 12pt;
+  line-height: 1.5;
+  border: none;
+  outline: none;
+  resize: none;
+  background: white;
+  white-space: pre-wrap;
+}
+
+/* ContentEditable specific styling */
+.contenteditable-editor {
+  min-height: 400px;
+  overflow-y: auto;
+}
+
+/* Slate.js editor specific styling */
+.slate-editor {
+  min-height: 400px;
+  overflow-y: auto;
+}
+
+.screenplay-line {
+  margin: 0;
+  padding: 0;
+  min-height: 1.5em;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Screenplay Element Formatting Classes */
+/* Based on industry standards: Scene headings and action LEFT aligned, Characters and Dialogue indented */
+
+/* Default line styling */
+.screenplay-line {
+  text-indent: 0;
+  text-align: left;
+  margin-right: 0;
+  text-transform: none;
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Scene Headings: Flush left, all caps, bold */
+.screenplay-line.element-scene_heading {
+  text-indent: 0;
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-right: 0;
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+}
+
+/* Action: Flush left, normal text */
+.screenplay-line.element-action {
+  text-indent: 0;
+  text-align: left;
+  text-transform: none;
+  font-weight: normal;
+  margin-right: 0;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+/* Character: 3.7" from left edge of page (2.2" from existing 1.5" margin) */
+.screenplay-line.element-character {
+  text-indent: 2.2in;
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: normal;
+  margin-right: 0;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+/* Dialogue: 2.5" from left edge (1" from existing 1.5" margin), max width 3" */
+.screenplay-line.element-dialogue {
+  text-indent: 1in;
+  text-align: left;
+  margin-right: 2.5in; /* Limit dialogue width */
+  text-transform: none;
+  font-weight: normal;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Parenthetical: 3.1" from left edge (1.6" from existing 1.5" margin) */
+.screenplay-line.element-parenthetical {
+  text-indent: 1.6in;
+  text-align: left;
+  text-transform: none;
+  font-weight: normal;
+  font-style: italic;
+  margin-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Transition: Right-aligned, 6" from left (flush right) */
+.screenplay-line.element-transition {
+  text-indent: 0;
+  text-align: right;
+  text-transform: uppercase;
+  font-weight: normal;
+  margin-right: 0;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+/* Legacy textarea support */
+.screenplay-input.element-scene_heading {
+  text-indent: 0;
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-right: 0;
+}
+
+.screenplay-input.element-action {
+  text-indent: 0;
+  text-align: left;
+  text-transform: none;
+  font-weight: normal;
+  margin-right: 0;
+}
+
+.screenplay-input.element-character {
+  text-indent: 2.2in;
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: normal;
+  margin-right: 0;
+}
+
+.screenplay-input.element-dialogue {
+  text-indent: 1in;
+  text-align: left;
+  margin-right: 2.5in;
+  text-transform: none;
+  font-weight: normal;
+}
+
+.screenplay-input.element-parenthetical {
+  text-indent: 1.6in;
+  text-align: left;
+  text-transform: none;
+  font-weight: normal;
+  font-style: italic;
+  margin-right: 0;
+}
+
+.screenplay-input.element-transition {
+  text-indent: 0;
+  text-align: right;
+  text-transform: uppercase;
+  font-weight: normal;
+  margin-right: 0;
+}
+
+/* Visual styling for different element types */
+.element-indicator {
+  background: #f8f9fa;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+.element-indicator strong {
+  color: #2c3e50;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.element-indicator.type-scene_heading strong {
+  background: #e74c3c;
+  color: white;
+}
+
+.element-indicator.type-action strong {
+  background: #95a5a6;
+  color: white;
+}
+
+.element-indicator.type-character strong {
+  background: #3498db;
+  color: white;
+}
+
+.element-indicator.type-dialogue strong {
+  background: #2ecc71;
+  color: white;
+}
+
+.element-indicator.type-parenthetical strong {
+  background: #f39c12;
+  color: white;
+}
+
+.element-indicator.type-transition strong {
+  background: #9b59b6;
+  color: white;
+}
+
+.shortcuts-hint {
+  color: #6c757d;
+  font-size: 0.8em;
+}
+
+/* Preview mode formatting for properly formatted output */
+.screenplay-preview {
+  max-width: 8.5in;
+  margin: 0 auto;
+  padding: 1in 1in 1in 1.5in;
+  font-family: 'Courier New', 'Courier', monospace;
+  font-size: 12pt;
+  line-height: 1.5;
+  background: white;
+  min-height: 11in;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.screenplay-preview .scene-heading {
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 1.5em 0 1em 0;
+}
+
+.screenplay-preview .character {
+  margin-left: 2.2in;
+  text-transform: uppercase;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+.screenplay-preview .dialogue {
+  margin-left: 1in;
+  margin-right: 1.5in;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.screenplay-preview .parenthetical {
+  margin-left: 1.6in;
+  font-style: italic;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.screenplay-preview .action {
+  margin: 1em 0;
+}
+
+.screenplay-preview .transition {
+  text-align: right;
+  text-transform: uppercase;
+  margin: 1em 0;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .screenplay-input {
+    background: #1a1a1a;
+    color: #e0e0e0;
+  }
+  
+  .screenplay-preview {
+    background: #1a1a1a;
+    color: #e0e0e0;
+  }
+  
+  .element-indicator {
+    background: #2c2c2c;
+    border-bottom-color: #333;
+    color: #e0e0e0;
+  }
+  
+  .shortcuts-hint {
+    color: #bbb;
+  }
+}
