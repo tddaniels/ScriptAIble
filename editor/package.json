@@ -12,7 +12,10 @@
   "dependencies": {
     "fountain-js": "file:..",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "slate": "^0.118.0",
+    "slate-history": "^0.113.1",
+    "slate-react": "^0.117.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
