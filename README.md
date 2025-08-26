@@ -8,18 +8,6 @@ Special thanks to [Nathan Hoad](https://www.npmjs.com/~nathanhoad) for the Fount
 
 Supports up to `v 1.1` of the [Fountain syntax](https://www.fountain.io/syntax#section-changes).
 
-## ScriptAIble Editor
-
-The repository includes an experimental React/TypeScript front end for editing Fountain scripts.
-
-```bash
-cd editor
-npm install
-npm run dev
-```
-
-The editor provides basic load/save functionality and a live JSON preview powered by the `fountain-js` parser.
-
 ## Install
 
 ```none

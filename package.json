@@ -9,10 +9,7 @@
     "build": "npm run clean && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc -b",
     "build:esm": "tsc -b ./tsconfig.esm.json",
-    "test": "jasmine --config=jasmine.json",
-    "dev": "npm run build && cd editor && npm run dev",
-    "editor:install": "cd editor && npm install",
-    "editor:build": "cd editor && npm run build"
+
   },
   "keywords": [
     "Typescript",
