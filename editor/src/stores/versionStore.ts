@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { APP_CONFIG } from '../config/appConfig';
 
 export interface VersionEntry {
   id: string;
@@ -67,7 +68,7 @@ export const useVersionStore = create<VersionStore>()(
       versions: {},
       undoStack: {},
       redoStack: {},
-      maxVersions: 50,
+      maxVersions: APP_CONFIG.editor.maxVersionHistory,
       maxUndoRedo: 30,
 
       // Save a new version
@@ -250,7 +251,7 @@ export const useVersionStore = create<VersionStore>()(
       },
     })),
     {
-      name: 'scriptaible-versions',
+      name: `${APP_CONFIG.storage.prefix}-versions`,
       storage: createJSONStorage(() => localStorage),
       // Only persist essential data, limit size
       partialize: (state) => ({

@@ -1,8 +1,11 @@
 {
-  "name": "editor",
+  "name": "scriptaible-template-editor",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "ScriptAIble Template Editor - Professional screenplay editing interface",
   "type": "module",
+  "template": true,
+  "keywords": ["screenplay", "editor", "react", "typescript", "fountain"],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

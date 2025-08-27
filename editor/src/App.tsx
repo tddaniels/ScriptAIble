@@ -12,6 +12,7 @@ import { useVersionControl } from './hooks/useVersionControl';
 import { exportScreenplayToPDF } from './services/pdfExporter';
 import { FinalDraftConverter } from './services/fdxConverter';
 import { getQuickStats } from './services/statistics';
+import { APP_CONFIG } from './config/appConfig';
 import './App.css';
 import './components/ScreenplayEditor.css';
 import './components/ScreenplayFormatting.css';
@@ -23,6 +24,19 @@ import './components/ScriptStatistics.css';
 export default function App() {
   const [parsed, setParsed] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'script' | 'scenes' | 'preview' | 'test' | 'slate-test' | 'stats'>('script');
+  
+  // Apply theme CSS variables
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--theme-primary', APP_CONFIG.theme.primary);
+    root.style.setProperty('--theme-secondary', APP_CONFIG.theme.secondary);
+    root.style.setProperty('--theme-background', APP_CONFIG.theme.background);
+    root.style.setProperty('--theme-text', APP_CONFIG.theme.text);
+    root.style.setProperty('--theme-accent', APP_CONFIG.theme.accent);
+    
+    // Update document title
+    document.title = APP_CONFIG.name;
+  }, []);
   const [quickStats, setQuickStats] = useState<any>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const fdxInput = useRef<HTMLInputElement>(null);
@@ -98,7 +112,7 @@ export default function App() {
     const exporter = exportScreenplayToPDF(
       parsed.tokens,
       scriptTitle,
-      'Author' // TODO: Get from script metadata
+      APP_CONFIG.export.defaultAuthor
     );
     exporter.save(`${scriptTitle}.pdf`);
   };
@@ -106,7 +120,7 @@ export default function App() {
   const exportFDX = () => {
     FinalDraftConverter.downloadFDX(script, `${scriptTitle}.fdx`, {
       title: scriptTitle,
-      author: 'Author' // TODO: Get from script metadata
+      author: APP_CONFIG.export.defaultAuthor
     });
   };
   
@@ -187,12 +201,22 @@ export default function App() {
         <div className="toolbar-left">
           <button onClick={createNewScript}>New</button>
           <button onClick={() => fileInput.current?.click()}>Load</button>
-          <button onClick={() => fdxInput.current?.click()}>Import FDX</button>
+          {APP_CONFIG.features.fdxImport && (
+            <button onClick={() => fdxInput.current?.click()}>Import FDX</button>
+          )}
           <button onClick={saveScript}>Save</button>
-          <button onClick={exportPDF} disabled={!parsed}>Export PDF</button>
-          <button onClick={exportFDX} disabled={!script}>Export FDX</button>
-          <button onClick={handleUndo} disabled={!versionControl.canUndo()}>↶ Undo</button>
-          <button onClick={handleRedo} disabled={!versionControl.canRedo()}>↷ Redo</button>
+          {APP_CONFIG.features.pdfExport && (
+            <button onClick={exportPDF} disabled={!parsed}>Export PDF</button>
+          )}
+          {APP_CONFIG.features.fdxImport && (
+            <button onClick={exportFDX} disabled={!script}>Export FDX</button>
+          )}
+          {APP_CONFIG.features.versionControl && (
+            <>
+              <button onClick={handleUndo} disabled={!versionControl.canUndo()}>↶ Undo</button>
+              <button onClick={handleRedo} disabled={!versionControl.canRedo()}>↷ Redo</button>
+            </>
+          )}
           {quickStats && (
             <span className="quick-stats">
               {quickStats.pages}p • {quickStats.words}w • {quickStats.scenes}s • {quickStats.runtime}
@@ -221,36 +245,44 @@ export default function App() {
           >
             Script
           </button>
-          <button 
-            className={`tab-button ${activeTab === 'scenes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('scenes')}
-          >
-            Scenes
-          </button>
+          {APP_CONFIG.features.sceneBoard && (
+            <button 
+              className={`tab-button ${activeTab === 'scenes' ? 'active' : ''}`}
+              onClick={() => setActiveTab('scenes')}
+            >
+              Scenes
+            </button>
+          )}
           <button 
             className={`tab-button ${activeTab === 'preview' ? 'active' : ''}`}
             onClick={() => setActiveTab('preview')}
           >
             Preview
           </button>
-          <button 
-            className={`tab-button ${activeTab === 'test' ? 'active' : ''}`}
-            onClick={() => setActiveTab('test')}
-          >
-            Test
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'slate-test' ? 'active' : ''}`}
-            onClick={() => setActiveTab('slate-test')}
-          >
-            Slate Test
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'stats' ? 'active' : ''}`}
-            onClick={() => setActiveTab('stats')}
-          >
-            Statistics
-          </button>
+          {APP_CONFIG.features.testSuite && (
+            <>
+              <button 
+                className={`tab-button ${activeTab === 'test' ? 'active' : ''}`}
+                onClick={() => setActiveTab('test')}
+              >
+                Test
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'slate-test' ? 'active' : ''}`}
+                onClick={() => setActiveTab('slate-test')}
+              >
+                Slate Test
+              </button>
+            </>
+          )}
+          {APP_CONFIG.features.statistics && (
+            <button 
+              className={`tab-button ${activeTab === 'stats' ? 'active' : ''}`}
+              onClick={() => setActiveTab('stats')}
+            >
+              Statistics
+            </button>
+          )}
         </div>
       </div>
       

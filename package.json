@@ -1,7 +1,7 @@
 {
   "name": "fountain-js",
-  "version": "1.2.4",
-  "description": "A simple parser for Fountain, a markup language for formatting screenplays.",
+  "version": "1.0.0",
+  "description": "ScriptAIble Template - Professional screenplay editing foundation",
   "main": "dist/index.js",
   "module": "dist.esm/index.js",
   "scripts": {
@@ -15,31 +15,32 @@
     "editor:build": "cd editor && npm run build"
   },
   "keywords": [
-    "Typescript",
-    "Javascript",
-    "Fountain",
-    "markdown",
-    "parser",
+    "screenplay",
     "screenwriting",
-    "screenplays",
+    "fountain",
+    "template",
+    "typescript",
+    "react",
+    "editor",
+    "final-draft",
+    "pdf-export",
     "filmmaking"
   ],
-  "homepage": "https://github.com/jonnygreenwald/fountain-js#readme",
+  "homepage": "https://github.com/yourusername/scriptaible-template#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jonnygreenwald/fountain-js.git"
+    "url": "git+https://github.com/yourusername/scriptaible-template.git"
   },
   "bugs": {
-    "url": "https://github.com/jonnygreenwald/fountain-js/issues"
+    "url": "https://github.com/yourusername/scriptaible-template/issues"
   },
-  "author": "Jonny Greenwald",
+  "author": "Template Author",
   "contributors": [
-    "Matt Daly",
-    "Jonny Greenwald",
-    "Nathan Hoad",
-    "Chandler Anderson"
+    "ScriptAIble Template Contributors"
   ],
   "license": "MIT",
+  "private": false,
+  "template": true,
   "devDependencies": {
     "@types/jasmine": "^5.1.2",
     "jasmine": "^5.1.0",

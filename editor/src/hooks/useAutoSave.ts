@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useScriptStore } from '../stores/scriptStore';
+import { APP_CONFIG } from '../config/appConfig';
 
 interface UseAutoSaveOptions {
   delay?: number; // Delay in milliseconds before saving
@@ -12,8 +13,8 @@ export const useAutoSave = (
   options: UseAutoSaveOptions = {}
 ) => {
   const {
-    delay = 2000, // 2 seconds default
-    enabled = true,
+    delay = APP_CONFIG.editor.autoSaveDelay,
+    enabled = APP_CONFIG.editor.autoSave,
   } = options;
 
   const updateScript = useScriptStore(state => state.updateScript);

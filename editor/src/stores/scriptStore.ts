@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-// Using custom nanoid implementation
+import { APP_CONFIG } from '../config/appConfig';
 
 export interface Script {
   id: string;
@@ -186,7 +186,7 @@ export const useScriptStore = create<ScriptStore>()(
       },
     })),
     {
-      name: 'scriptaible-storage',
+      name: `${APP_CONFIG.storage.prefix}-storage`,
       storage: createJSONStorage(() => localStorage),
       // Only persist essential data
       partialize: (state) => ({

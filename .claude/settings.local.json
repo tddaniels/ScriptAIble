@@ -14,7 +14,8 @@
       "Bash(npm install:*)",
       "Bash(npm run editor:install:*)",
       "WebFetch(domain:www.slatejs.org)",
-      "Bash(npm ls:*)"
+      "Bash(npm ls:*)",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }
